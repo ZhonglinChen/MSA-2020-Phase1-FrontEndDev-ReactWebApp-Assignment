@@ -20,16 +20,17 @@ steps:
 # Download a secure file to the agent machine
 - task: DownloadSecureFile@1
   name: myEnvFile # The name with which to reference the secure file's path on the agent, like $(mySecureFile.secureFilePath)
-  displayName: 'Download env.local'
+  displayName: 'Download .env.local'
   inputs:
     secureFile: '.env.local' # The file name or GUID of the secure file
+
 - script: |
     echo "`ls -la`"
     echo download the env.local containing APIkeys
     echo "`cat $(myEnvFile.secureFilePath)`"
     cp $(myEnvFile.secureFilePath) ./.env.local
     echo "`ls -la`"
-
+  displayName: 'Copy .env.local to App root folder'
 
 - task: NodeTool@0
   inputs:
