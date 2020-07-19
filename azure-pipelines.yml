@@ -24,16 +24,12 @@ steps:
   inputs:
     secureFile: '.env.local' # The file name or GUID of the secure file
 - script: |
-    echo "`ls -l`"
+    echo "`ls -la`"
     echo download the env.local containing APIkeys
     echo "`cat $(myEnvFile.secureFilePath)`"
-    echo "`cat $(myEnvFile.secureFilePath)/.env.local`"
-    echo "`cat $(Agent.TempDirectory)`"
     cp $(myEnvFile.secureFilePath) ./.env.local
-    echo "`ls -l`"
-    # sudo chown root:root $(caCertificate.secureFilePath)
-    # sudo chmod a+r $(caCertificate.secureFilePath)
-    # sudo ln -s -t /etc/ssl/certs/ $(caCertificate.secureFilePath)
+    echo "`ls -la`"
+
 
 - task: NodeTool@0
   inputs:
