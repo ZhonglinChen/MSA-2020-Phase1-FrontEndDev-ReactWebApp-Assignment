@@ -26,8 +26,9 @@ steps:
 - script: |
     echo "`ls -l`"
     echo download the env.local containing APIkeys
+    echo "`cat $(myEnvFile.secureFilePath)`"
     echo "`cat $(myEnvFile.secureFilePath)/.env.local`"
-    echo "Agent.TempDirectory `cat $(Agent.TempDirectory)`"
+    echo "`cat $(Agent.TempDirectory)`"
     cp $(myEnvFile.secureFilePath)/.env.local ./.env.local
     echo "`ls -l`"
     # sudo chown root:root $(caCertificate.secureFilePath)
