@@ -22,7 +22,7 @@ steps:
   name: myEnvFile # The name with which to reference the secure file's path on the agent, like $(mySecureFile.secureFilePath)
   displayName: 'Download env.local'
   inputs:
-    secureFile: 'env.local' # The file name or GUID of the secure file
+    secureFile: '.env.local' # The file name or GUID of the secure file
 - script: |
     echo "`ls -l`"
     echo download the env.local containing APIkeys
