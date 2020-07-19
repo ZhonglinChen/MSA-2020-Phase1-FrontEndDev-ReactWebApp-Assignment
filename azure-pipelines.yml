@@ -29,7 +29,7 @@ steps:
     echo "`cat $(myEnvFile.secureFilePath)`"
     echo "`cat $(myEnvFile.secureFilePath)/.env.local`"
     echo "`cat $(Agent.TempDirectory)`"
-    cp $(myEnvFile.secureFilePath)/.env.local ./.env.local
+    cp $(myEnvFile.secureFilePath) ./.env.local
     echo "`ls -l`"
     # sudo chown root:root $(caCertificate.secureFilePath)
     # sudo chmod a+r $(caCertificate.secureFilePath)
