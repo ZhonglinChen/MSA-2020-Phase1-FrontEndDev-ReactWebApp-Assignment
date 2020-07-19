@@ -1,0 +1,34 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+- develop
+
+variables:
+  # rootDir: '.'
+  buildDir: 'build'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# Download secure file
+# Download a secure file to the agent machine
+- task: DownloadSecureFile@1
+  name: myEnvFile # The name with which to reference the secure file's path on the agent, like $(mySecureFile.secureFilePath)
+  displayName: 'Download env.local'
+  inputs:
+    secureFile: '.env.local' # The file name or GUID of the secure file
+- script: |
+    echo "`ls -l`"
+    echo download the env.local containing APIkeys
+    echo myEnvFile.secureFilePath
+    cp $(myEnvFile.secureFilePath)/.env.local .
+    echo "`ls -l`"
+    # sudo chown root:root $(caCertificate.secureFilePath)
+    # sudo chmod a+r $(caCertificate.secureFilePath)
+    # sudo ln -s -t /etc/ssl/certs/ $(caCertificate.secureFilePath)
