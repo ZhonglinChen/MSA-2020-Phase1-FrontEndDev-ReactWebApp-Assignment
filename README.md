@@ -1,7 +1,7 @@
 Todo:
 
 - [ ] re-layout documents
-- [ ] 
+- [ ] frontend part docs
 
 ------
 
@@ -11,15 +11,13 @@ https://msa2020-phase1-devops-reactwebapp-assignment.azurewebsites.net/
 
 
 
-##  2. Short description of your build and release pipelines in your project README(This is a your chance to explain to us what you have implemented for your build & release pipeline and why 😃)
+##  2. Description of build and release pipelines(what and why)
 
 My build pipeline:
 
 ![BuildPipelineName](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineName.png)
 
 The following is the detail of the build pipeline:
-
-![BuildPipelineDetailAll](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailAll.png)
 
 ```yaml
 # Starter pipeline
@@ -46,7 +44,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-
 # Download secure file
 # Download a secure file to the agent machine
 - task: DownloadSecureFile@1
@@ -67,10 +64,12 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
+  
 - script: |
     npm install
     npm run build
   displayName: 'npm install and build'
+  
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(buildDir)'
@@ -78,6 +77,7 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
+    
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -91,19 +91,44 @@ steps:
 
 The following lists explanations for each part:
 
-![BuildPipelineDetailTrigger](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailTrigger.png)
+```yaml
+trigger:
+  branches:
+    include:
+      - master
+      - develop
+  paths:
+    exclude:
+    - README.md # This tells the pipeline not to trigger if the only change was made was made to the README.md file regardless of on which branch the change is made.
+    - azure*.yml
+    - Images/*
+```
+
+
 
 In the "trigger" section, the pipeline is set to run only when a commit is pushed to the 'master' branch and 'develop' branch except that only change was made to the 'README.md' file or any '.yml' files started with azure.
 
 
 
-![BuildPipelineDetailVariables](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailVariables.png)
+```yaml
+variables:
+  # rootDir: '.'
+  buildDir: 'build'
+```
 
 In the variables section, buildDir was set as folder called 'build'.
 
 
 
-![BuildPipelineDetailDownloadSecureFile](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailDownloadSecureFile.png)
+```yaml
+# Download secure file
+# Download a secure file to the agent machine
+- task: DownloadSecureFile@1
+  name: myEnvFile # The name with which to reference the secure file's path on the agent, like $(mySecureFile.secureFilePath)
+  displayName: 'Download .env.local'
+  inputs:
+    secureFile: '.env.local' # The file name or GUID of the secure file
+```
 
 In the step of 'Download .env.local', the secure file '.env.local' that stored in the Azure DevOps Pipelines was downloaded to agent machine.
 
@@ -113,15 +138,26 @@ You can manage yourselves secure files in the tag shown below. For more details 
 
 ![LibrarySecureFiles](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/LibrarySecureFiles.png)
 
-
-
-![BuildPipelineDetailCopyEnv](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailCopyEnv.png)
+```yaml
+- script: |
+    echo "`ls -la`"
+    echo download the env.local containing APIkeys
+    echo "`cat $(myEnvFile.secureFilePath)`"
+    cp $(myEnvFile.secureFilePath) ./.env.local
+    echo "`ls -la`"
+  displayName: 'Copy .env.local to App root folder'
+```
 
 In the next step, the '.env.local' that stores APIkey would be copied to the root folder of React application. In this step, actually only the copy command line is necessary. 
 
 
 
-![BuildPipelineDetailInstalNodeJs](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailInstalNodeJs.png)
+```yaml
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+```
 
 Then, we download Node.js in the agent machine.
 
@@ -129,13 +165,31 @@ Then, we download Node.js in the agent machine.
 
 Then, install and build the React app
 
-![BuildPipelineDetailInstalNPMandBuild](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailInstalNPMandBuild.png)
+```yaml
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+```
 
 
 
 In the last two steps, the build folder would be compressed and published as artifacts.
 
-
+```yaml
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(buildDir)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+```
 
 
 
