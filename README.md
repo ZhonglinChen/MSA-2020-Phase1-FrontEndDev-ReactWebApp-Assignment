@@ -1,21 +1,29 @@
 Todo:
 
-- [ ] re-layout documents
 - [ ] frontend part docs
+- [ ] table of contents 
 
 ------
 
-##  1. The URL of my website: 
+#  1. The URL of my website: 
 
 https://msa2020-phase1-devops-reactwebapp-assignment.azurewebsites.net/
 
 
 
-##  2. Description of build and release pipelines(what and why)
+#  2. Description of build and release pipelines
 
-My build pipeline:
+The following list explains for each part in my build and release pipelines(what and why):
+
+## 2.1 Build Pipeline
+
+### Access Build Pipeline
+
+Following screenshot shows where my build pipeline to access:
 
 ![BuildPipelineName](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineName.png)
+
+### Build Pipeline - Overview
 
 The following is the detail of the build pipeline:
 
@@ -87,9 +95,9 @@ steps:
 
 
 
+### Build Pipeline - Trigger
 
-
-The following lists explanations for each part:
+The following is the trigger of the build pipeline:
 
 ```yaml
 trigger:
@@ -104,11 +112,13 @@ trigger:
     - Images/*
 ```
 
+In the "trigger" section, the pipeline is set to run only when a commit is pushed to the 'master' branch and 'develop' branch except when only change was made to those 'README.md' related files or any '.yml' files started with azure.
 
 
-In the "trigger" section, the pipeline is set to run only when a commit is pushed to the 'master' branch and 'develop' branch except that only change was made to the 'README.md' file or any '.yml' files started with azure.
 
+### Build Pipeline - Variables
 
+The following is the variables of the build pipeline:
 
 ```yaml
 variables:
@@ -116,9 +126,13 @@ variables:
   buildDir: 'build'
 ```
 
-In the variables section, buildDir was set as folder called 'build'.
+In my project, there is no need o set 'rootDir'. Only 'buildDir' was set as folder called 'build' directly under current root.
 
 
+
+### Build Pipeline - Steps - Download Secure Files
+
+The following is the step of the build pipeline to download secure files:
 
 ```yaml
 # Download secure file
@@ -130,13 +144,23 @@ In the variables section, buildDir was set as folder called 'build'.
     secureFile: '.env.local' # The file name or GUID of the secure file
 ```
 
-In the step of 'Download .env.local', the secure file '.env.local' that stored in the Azure DevOps Pipelines was downloaded to agent machine.
+In my project, the file called '.env.local' that stores API key will be only stored locally and at Azure DevOps Library. 
+
+Therefore, in the first step, before building project, the secure file '.env.local' should be downloaded from Azure DevOps to agent machine. This file would be temporarily stored in a folder storing secure files.
+
+For more details about how to access secure files stored in AzureDevOps, read https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/download-secure-file?view=azure-devops 
 
 
 
-You can manage yourselves secure files in the tag shown below. For more details about how to access secure files stored in AzureDevOps, read https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/download-secure-file?view=azure-devops
+To manage yourselves secure files, you could access the tag shown below. 
 
 ![LibrarySecureFiles](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/LibrarySecureFiles.png)
+
+
+
+### Build Pipeline - Steps - Copy '.Env.local' File  
+
+The following is the step of the build pipeline to copy the '.env.local' from downloaded path to the folder of our React application:
 
 ```yaml
 - script: |
@@ -148,9 +172,15 @@ You can manage yourselves secure files in the tag shown below. For more details 
   displayName: 'Copy .env.local to App root folder'
 ```
 
-In the next step, the '.env.local' that stores APIkey would be copied to the root folder of React application. In this step, actually only the copy command line is necessary. 
+In this step, the '.env.local' that stores API key would be copied to the root folder of React application. 
+
+For this part of scripts, actually only `cp $(myEnvFile.secureFilePath) ./.env.local` is necessary.  Other command lines of 'echo' are all used to print content in the terminal, which is good for debug.
 
 
+
+### Build Pipeline - Steps - Install NodeJS  
+
+The following is the step of the build pipeline to install NodeJS :
 
 ```yaml
 - task: NodeTool@0
@@ -159,11 +189,13 @@ In the next step, the '.env.local' that stores APIkey would be copied to the roo
   displayName: 'Install Node.js'
 ```
 
-Then, we download Node.js in the agent machine.
+NodeJS is required to build our React application in the following steps.
 
 
 
-Then, install and build the React app
+### Build Pipeline - Steps - Install Packages and Build App  
+
+The following is the step of the build pipeline to install NodeJS :
 
 ```yaml
 - script: |
@@ -172,9 +204,13 @@ Then, install and build the React app
   displayName: 'npm install and build'
 ```
 
+In this step, we run two NPM command lines to respectively install dependent packages for our application and then build our React application.
 
 
-In the last two steps, the build folder would be compressed and published as artifacts.
+
+### Build Pipeline - Steps - Archive and Publish
+
+The following is the step of the build pipeline to install NodeJS :
 
 ```yaml
 - task: ArchiveFiles@2
@@ -191,26 +227,42 @@ In the last two steps, the build folder would be compressed and published as art
     publishLocation: 'Container'
 ```
 
+In the last two steps, the build folder would be compressed and published as artifacts.
 
 
 
+## 2.2 Release Pipeline
 
+### Release Pipeline - Overview
 
-
-###### Release Pipeline:
+The following is the overview of the release pipeline:
 
 ![ReleasePipelineOverview](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/ReleasePipelineOverview.png)
 
-In the release pipeline, the above build pipeline was set as source that published the artifact.
+### Release Pipeline - Artifact
+
+The following is the Artifact setting of the release pipeline:
 
 ![ReleasePipelineAritifact](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/ReleasePipelineAritifact.png)
 
-Meanwhile, enable the trigger that would automatically start release pipeline if new build pipeline from 'master' branch completed.
+In the release pipeline, the build pipeline at above section is set as source that would publish the artifact.
+
+
+
+### Release Pipeline - Trigger
+
+The following is the Trigger setting of the release pipeline:
 
 ![ReleasePipelineTrigger](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/ReleasePipelineTrigger.png)
 
+In the trigger setting, we enable that release pipeline would automatically start if there is any new completion coming up from our build pipeline under 'master' branch. 
 
 
-Once release pipeline start, the task of deployment would begin to deploy React app to corresponding Azure web service.
+
+### Release Pipeline - Tasks - Deployment
+
+The following is the task setting of the release pipeline for development:
 
 ![ReleasePipelineStage1](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/ReleasePipelineStage1.png)
+
+Once this release pipeline start, the task of deployment would begin to deploy the artifact of our React application online with corresponding Azure web service.
