@@ -1,40 +1,93 @@
-#### Make sure to have the following ready when you submit.
+Todo:
 
-1. - [x] Azure build pipeline
-
-   - Enable a continuous deployment to create releases on new commits to `develop` and `master` branches.
-
-2. - [x] Azure release pipeline
-
-   - Enable a continuous deployment to deploy your release to Azure for new commits to `master` branch.
-
-3. - [x] A deployed website on Azure (Add the URL of your website on your project README)
-
-4. - [ ] Write a short description of your build and release pipelines in your project README (This is a your chance to explain to us what you have implemented for your build & release pipeline and why 😃)
-
-5. - [ ] GitHub repo (Add us as contributor → Submit the invite link)
-
-Submission form on the main page
-
-
+- [ ] re-layout documents
+- [ ] 
 
 ------
 
-- ######  The URL of my website: 
+##  1. The URL of my website: 
 
-  https://msa2020-phase1-devops-reactwebapp-assignment.azurewebsites.net/
+https://msa2020-phase1-devops-reactwebapp-assignment.azurewebsites.net/
 
 
 
-- ######  short description of your build and release pipelines in your project README
+##  2. Short description of your build and release pipelines in your project README(This is a your chance to explain to us what you have implemented for your build & release pipeline and why 😃)
 
-  My build pipeline:
+My build pipeline:
 
-  ![BuildPipelineName](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineName.png)
+![BuildPipelineName](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineName.png)
 
 The following is the detail of the build pipeline:
 
 ![BuildPipelineDetailAll](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/BuildPipelineDetailAll.png)
+
+```yaml
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - master
+      - develop
+  paths:
+    exclude:
+    - README.md # This tells the pipeline not to trigger if the only change was made was made to the README.md file regardless of on which branch the change is made.
+    - azure*.yml
+    - Images/*
+
+variables:
+  # rootDir: '.'
+  buildDir: 'build'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# Download secure file
+# Download a secure file to the agent machine
+- task: DownloadSecureFile@1
+  name: myEnvFile # The name with which to reference the secure file's path on the agent, like $(mySecureFile.secureFilePath)
+  displayName: 'Download .env.local'
+  inputs:
+    secureFile: '.env.local' # The file name or GUID of the secure file
+
+- script: |
+    echo "`ls -la`"
+    echo download the env.local containing APIkeys
+    echo "`cat $(myEnvFile.secureFilePath)`"
+    cp $(myEnvFile.secureFilePath) ./.env.local
+    echo "`ls -la`"
+  displayName: 'Copy .env.local to App root folder'
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(buildDir)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+```
+
+
+
+
 
 The following lists explanations for each part:
 
