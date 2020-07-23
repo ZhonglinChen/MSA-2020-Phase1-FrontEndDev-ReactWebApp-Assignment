@@ -12,6 +12,7 @@ trigger:
     exclude:
     - README.md # This tells the pipeline not to trigger if the only change was made was made to the README.md file regardless of on which branch the change is made.
     - azure*.yml
+    - Images/*
 
 variables:
   # rootDir: '.'
