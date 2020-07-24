@@ -11,6 +11,8 @@ interface IMovieState {
 
 interface IMovieGridProps{
     ReleaseYear:(number|null);
+    Genre:(number[]|null);
+    SortBy:(string|null);
 }
 
 function MovieGrid(props: IMovieGridProps){
@@ -19,7 +21,9 @@ function MovieGrid(props: IMovieGridProps){
     
 
     useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&primary_release_year=${props.ReleaseYear}`)
+
+console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}`);
+        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}`)
             .then(response => response.json())
             .then(response => {
                 setItemArray(response.results)
@@ -27,7 +31,7 @@ function MovieGrid(props: IMovieGridProps){
             .catch(() => console.log("it didn't work")
             );
 
-    }, [props.ReleaseYear]);
+    }, [props.ReleaseYear,props.SortBy]);
 
 
     var Cards: JSX.Element[] = [];
