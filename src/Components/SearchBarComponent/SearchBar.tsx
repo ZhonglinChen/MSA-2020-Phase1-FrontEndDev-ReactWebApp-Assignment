@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
@@ -9,10 +9,12 @@ import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import './SearchBar.css';
 import { IUserInput } from '../../Common/Interface/Interfaces';
 
-interface ISearchBarProps {
-    SetUserInput: (a: IUserInput) => void;
-}
+import OrderByRadio from './OrderByRadioComponent/OrderByRadio';
+import YearSlider from './YearSliderComponent/YearSlider';
 
+
+
+//usesd for checkbox in Material-UI
 const GreenCheckbox = withStyles({
     root: {
         color: green[400],
@@ -23,188 +25,104 @@ const GreenCheckbox = withStyles({
     checked: {},
 })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
-function SearchBar(props: ISearchBarProps) {
-    const [SortBy, setSortBy] = useState<string | null>('popularity.desc');
-    const handleSortByChange = (sort: string | null) => {
-        setSortBy(sort);
-    };
+//SearchBar Object Interfaces
+interface ISearchBarProps {
+    SetUserInput: (a: IUserInput) => void;
+}
 
+interface IGenre {
+    id: (number | null),
+    name: (string | null)
+}
+function SearchBar(props: ISearchBarProps) {
+
+    //State: ReleaseYear
     const [ReleaseYear, setReleaseYear] = useState<number | null>(2020);
     const handleReleaseYear = (year: number | null) => {
         setReleaseYear(year);
+        let UserInput: IUserInput = {
+            ReleaseYear: year,
+            Genre: [],
+            SortBy:SortBy
+        }
+        props.SetUserInput(UserInput);
+
     };
 
-    const [Genre, setGenre] = React.useState({
-        checkedA: true,
-        checkedB: true,
-        checkedC: true,
-        checkedD: true,
-    });
+    //State: SortBy
+    const [SortBy, setSortBy] = useState<string |null>('popularity.desc');
+    const handleSortByChange = (sort: string |null) => {
+        setSortBy(sort);
 
+        let UserInput: IUserInput = {
+            ReleaseYear: ReleaseYear,
+            Genre: [],
+            SortBy:sort
+        }
+        props.SetUserInput(UserInput);
+
+    };
+
+
+    const [GenreArray, SetGenreArray] = useState(() => {
+        fetch('https://api.themoviedb.org/3/genre/movie/list?api_key=b07d9ab3b3c956c4da63be41d5120df9&language=en-US')
+            .then(response => response.json())
+            .then(response => {
+                SetGenreArray(response.genres)
+            })
+            .catch(() => console.log("it didn't work")
+            );
+    })
+
+    const [GenreIdArray, setGenreIdArray] = useState<number[] | null>([]);
+    //State: Genre
+    const [Genre, setGenre] = React.useState({
+        Action: true,
+        Adventure: true,
+        Animation: true,
+        Comedy: true,
+    });
+    //for checkbox in Material-UI
     const handleGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setGenre({ ...Genre, [event.target.name]: event.target.checked });
+        console.log(Genre);
     };
 
-
-    const [SearchQuery, setSearchQuery] = useState<string | null>("");
-    const handleSearchQueryChange = (s: string | null) => {
-        setSearchQuery(s);
-    }
-    const [HasFocus, setHasFocus] = useState<boolean>(false);
-    const handleSubmit = () => {
-        console.log(SearchQuery);
-
-        if (SearchQuery?.length !== 0 && SearchQuery !== null && SearchQuery !== "") {
-            let UserInput: IUserInput = {
-               ReleaseYear:parseInt(SearchQuery)
-            }
-            props.SetUserInput(UserInput);
-            // console.log(UserInput);
-        } else {
-            setHasFocus(true);
-        }
-    }
 
     return <div className="SearchBarContainer">
 
-        <Grid container spacing={3}>
-            <Grid item xs={6} sm={3}>
-                <TextField
-                    required
-                    id="outlined-required"
-                    label="Search"
-                    variant="outlined"
-                    error={HasFocus && SearchQuery === ""}
-                    onClick={() => setHasFocus(true)}
-                    value={SearchQuery}
-                    onChange={e => handleSearchQueryChange(e.target.value)}
-                />
-            </Grid>
-
-            <Grid item xs={6} sm={3}>
-                <Button variant="contained" color="primary" onClick={handleSubmit}>
-                         Submit
-                 </Button>
-            </Grid>
+        <Grid container  spacing={3}>
+           <Grid item xs={12} sm={12}>
+               <YearSlider SetYearRelease = { (year:number) => handleReleaseYear(year)}/>
+           </Grid>
 
             <Grid item xs={12} sm={12}>
                 <FormGroup row>
                     <FormControlLabel
-                        control={<GreenCheckbox checked={Genre.checkedA} onChange={handleGenreChange} name="checkedA" />}
-                        label="1"
+                        control={<GreenCheckbox checked={Genre.Action} onChange={handleGenreChange} name="Action" />}
+                        label="Action" value="28"
                     />
                     <FormControlLabel
-                        control={<GreenCheckbox checked={Genre.checkedB} onChange={handleGenreChange} name="checkedB" />}
-                        label="2"
+                        control={<GreenCheckbox checked={Genre.Adventure} onChange={handleGenreChange} name="Adventure" />}
+                        label="Adventure" value="12"
                     />
                     <FormControlLabel
-                        control={<GreenCheckbox checked={Genre.checkedC} onChange={handleGenreChange} name="checkedC" />}
-                        label="3"
+                        control={<GreenCheckbox checked={Genre.Animation} onChange={handleGenreChange} name="Animation" />}
+                        label="Animation" value="16"
                     />
                     <FormControlLabel
-                        control={<GreenCheckbox checked={Genre.checkedD} onChange={handleGenreChange} name="checkedD" />}
-                        label="4"
+                        control={<GreenCheckbox checked={Genre.Comedy} onChange={handleGenreChange} name="Comedy" />}
+                        label="Comedy" value="35"
                     />
-
-
                 </FormGroup>
             </Grid>
+            <Grid item xs={12} sm={12}>
+                <OrderByRadio SetOrderBy= {(orderby:string)=> handleSortByChange(orderby)} />
+            </Grid>
 
-           
+
         </Grid>
     </div>
-
-    // const [StartDate, setStartDate] = useState<Date | null>(
-    //     new Date('2014-08-18'),
-    // );
-    // const handleStartDateChange = (date: Date | null) => {
-    //     setStartDate(date);
-    // };
-
-    // const [EndDate, setEndDate] = useState<Date | null>(
-    //     new Date('2020-05-18'),
-    // );
-
-    // const handleEndDateChange = (date: Date | null) => {
-    //     setEndDate(date);
-    // };
-
-    // const [SearchQuery, setSearchQuery] = useState<string | null>("");
-    // const handleSearchQueryChange = (s: string | null) => {
-    //     setSearchQuery(s);
-    // }
-    // const [HasFocus, setHasFocus] = useState<boolean>(false);
-
-    // const handleSubmit = () => {
-    //     console.log(SearchQuery);
-
-    //     if (SearchQuery?.length !== 0 && SearchQuery !== null && SearchQuery !== "") {
-    //         let UserInput: IUserInput = {
-    //             SearchQuery: SearchQuery,
-    //             StartDate: StartDate,
-    //             EndDate: EndDate
-    //         }
-    //         props.SetUserInput(UserInput);
-    //     } else {
-    //         setHasFocus(true);
-    //     }
-    // }
-
-    // return <div className="SearchBarContainer">
-    //     <Grid container spacing={3}>
-    //         <Grid item xs={6} sm={3}>
-    //             <TextField
-    //                 required
-    //                 id="outlined-required"
-    //                 label="Search"
-    //                 variant="outlined"
-    //                 error={HasFocus && SearchQuery === ""}
-    //                 onClick={() => setHasFocus(true)}
-    //                 value={SearchQuery}
-    //                 onChange={e => handleSearchQueryChange(e.target.value)}
-    //             />
-    //         </Grid>
-
-    //         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    //             <Grid item xs={6} sm={3}>
-    //                 <KeyboardDatePicker
-    //                     disableToolbar
-    //                     variant="inline"
-    //                     format="MM/dd/yyyy"
-    //                     margin="normal"
-    //                     id="StartDate"
-    //                     label="Start Date (optional)"
-    //                     value={StartDate}
-    //                     onChange={handleStartDateChange}
-    //                     KeyboardButtonProps={{
-    //                         'aria-label': 'change date',
-    //                     }}
-    //                 />
-    //             </Grid>
-    //             <Grid item xs={6} sm={3}>
-    //                 <KeyboardDatePicker
-    //                     disableToolbar
-    //                     variant="inline"
-    //                     format="MM/dd/yyyy"
-    //                     margin="normal"
-    //                     id="EndData"
-    //                     label="End Date (optional)"F
-    //                     value={EndDate}
-    //                     onChange={handleEndDateChange}
-    //                     KeyboardButtonProps={{
-    //                         'aria-label': 'change date',
-    //                     }}
-    //                 />
-    //             </Grid>F
-    //         </MuiPickersUtilsProvider>
-
-    //         <Grid item xs={6} sm={3}>
-    //             <Button variant="contained" color="primary" onClick={handleSubmit}>
-    //                 Submit
-    //             </Button>
-    //         </Grid>
-    //     </Grid>
-    // </div>
 
 }
 

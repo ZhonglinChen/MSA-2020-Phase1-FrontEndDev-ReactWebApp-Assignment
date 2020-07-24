@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SearchBar from './Components/SearchBarComponent/SearchBar';
 import MovieGrid from './Components/MovieGridComponent/MovieGrid';
 import { IUserInput } from './Common/Interface/Interfaces';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme, Container } from '@material-ui/core';
 const theme = createMuiTheme({
   breakpoints: {
     values: {
@@ -18,21 +18,26 @@ const theme = createMuiTheme({
 })
 
 function App() {
-  let apiKey = process.env.REACT_APP_API_KEY;
 
   const [UserInput, setUserInput] = useState<IUserInput>({
-    ReleaseYear: 2020
+    ReleaseYear: 2020,
+    Genre:[],
+    SortBy:'popularity.desc'
   });
   function SetUserInput(a: IUserInput) {
     setUserInput(a);
   }
+
   return (
-    <div className="App">
+    <Container className="App">
+
       <MuiThemeProvider theme={theme}>
+
+       <h1>Movie Discover  -  API from TMDB </h1> 
         <SearchBar SetUserInput={(a: IUserInput) => SetUserInput(a)} />
-        <MovieGrid ReleaseYear={UserInput.ReleaseYear}  />
+        <MovieGrid ReleaseYear={UserInput.ReleaseYear} Genre={UserInput.Genre} SortBy={UserInput.SortBy} />
       </MuiThemeProvider>
-    </div >
+    </Container >
   );
 }
 
