@@ -41,7 +41,6 @@ function SearchBar(props: ISearchBarProps) {
         setReleaseYear(year);
     };
 
-
     //State: SortBy
     const [SortBy, setSortBy] = useState<string |null>('popularity.desc');
     const handleSortByChange = (sort: string |null) => {
@@ -54,10 +53,6 @@ function SearchBar(props: ISearchBarProps) {
         }
         props.SetUserInput(UserInput);
     };
-
-
-
-
 
 
     const [GenreArray, SetGenreArray] = useState(() => {

@@ -3,26 +3,26 @@ import { Grid } from '@material-ui/core';
 import MediaCard from '../MovieCardComponent/MovieCard';
 
 interface IMovieState {
-    title:(string |null);
-    release_date:(Date|null);
-    vote_average:(number|null);
-    overview:(string|null);
+    title: (string | null);
+    release_date: (Date | null);
+    vote_average: (number | null);
+    overview: (string | null);
 }
 
-interface IMovieGridProps{
-    ReleaseYear:(number|null);
-    Genre:(number[]|null);
-    SortBy:(string|null);
+interface IMovieGridProps {
+    ReleaseYear: (number | null);
+    Genre: (number[] | null);
+    SortBy: (string | null);
 }
 
-function MovieGrid(props: IMovieGridProps){
-    const [ItemArray, setItemArray] = useState<IMovieState[]>([{ title: null, release_date:null, vote_average:null,overview:null}]);
+function MovieGrid(props: IMovieGridProps) {
+    const [ItemArray, setItemArray] = useState<IMovieState[]>([{ title: null, release_date: null, vote_average: null, overview: null }]);
 
-    
+
 
     useEffect(() => {
 
-console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}`);
+        console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}`);
         fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}`)
             .then(response => response.json())
             .then(response => {
@@ -31,7 +31,7 @@ console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.R
             .catch(() => console.log("it didn't work")
             );
 
-    }, [props.ReleaseYear,props.SortBy]);
+    }, [props.ReleaseYear, props.SortBy]);
 
 
     var Cards: JSX.Element[] = [];
@@ -40,7 +40,7 @@ console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.R
             return;
         }
         Cards.push(
-            <Grid key={"card_"+i} item sm={6} md={4} lg={3} className="MediaGridCard">
+            <Grid key={"card_" + i} item sm={6} md={4} lg={3} className="MediaGridCard">
                 <MediaCard MovieInfo={el} />
             </Grid>)
     })
