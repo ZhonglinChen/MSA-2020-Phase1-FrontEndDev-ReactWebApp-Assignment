@@ -9,7 +9,8 @@ import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import './SearchBar.css';
 import { IUserInput } from '../../Common/Interface/Interfaces';
 
-import OrderByRadio from '../OrderByRadioComponent/OrderByRadio';
+import OrderByRadio from './OrderByRadioComponent/OrderByRadio';
+import YearSlider from './YearSliderComponent/YearSlider';
 
 
 
@@ -39,6 +40,13 @@ function SearchBar(props: ISearchBarProps) {
     const [ReleaseYear, setReleaseYear] = useState<number | null>(2020);
     const handleReleaseYear = (year: number | null) => {
         setReleaseYear(year);
+        let UserInput: IUserInput = {
+            ReleaseYear: year,
+            Genre: [],
+            SortBy:SortBy
+        }
+        props.SetUserInput(UserInput);
+
     };
 
     //State: SortBy
@@ -49,9 +57,10 @@ function SearchBar(props: ISearchBarProps) {
         let UserInput: IUserInput = {
             ReleaseYear: ReleaseYear,
             Genre: [],
-            SortBy:SortBy
+            SortBy:sort
         }
         props.SetUserInput(UserInput);
+
     };
 
 
@@ -82,8 +91,10 @@ function SearchBar(props: ISearchBarProps) {
 
     return <div className="SearchBarContainer">
 
-        <Grid container spacing={3}>
-           {ReleaseYear}
+        <Grid container  spacing={3}>
+           <Grid item xs={12} sm={12}>
+               <YearSlider SetYearRelease = { (year:number) => handleReleaseYear(year)}/>
+           </Grid>
 
             <Grid item xs={12} sm={12}>
                 <FormGroup row>

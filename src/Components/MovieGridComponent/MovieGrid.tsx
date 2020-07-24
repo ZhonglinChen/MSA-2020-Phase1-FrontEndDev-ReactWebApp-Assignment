@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core';
-import MediaCard from '../MovieCardComponent/MovieCard';
+import MediaCard from './MovieCardComponent/MovieCard';
 
 interface IMovieState {
     title: (string | null);

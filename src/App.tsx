@@ -4,7 +4,7 @@ import './App.css';
 import SearchBar from './Components/SearchBarComponent/SearchBar';
 import MovieGrid from './Components/MovieGridComponent/MovieGrid';
 import { IUserInput } from './Common/Interface/Interfaces';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme, Container } from '@material-ui/core';
 const theme = createMuiTheme({
   breakpoints: {
     values: {
@@ -29,13 +29,15 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <Container className="App">
+
       <MuiThemeProvider theme={theme}>
+
        <h1>Movie Discover  -  API from TMDB </h1> 
         <SearchBar SetUserInput={(a: IUserInput) => SetUserInput(a)} />
         <MovieGrid ReleaseYear={UserInput.ReleaseYear} Genre={UserInput.Genre} SortBy={UserInput.SortBy} />
       </MuiThemeProvider>
-    </div >
+    </Container >
   );
 }
 
