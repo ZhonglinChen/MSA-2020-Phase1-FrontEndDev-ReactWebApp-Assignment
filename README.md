@@ -1,7 +1,7 @@
 Todo:
 
 - [ ] frontend part docs
-- [ ] table of contents 
+- [ ] table of contents and abstract of my docs
 
 ------
 
