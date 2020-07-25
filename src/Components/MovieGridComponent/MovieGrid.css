@@ -1,0 +1,22 @@
+.MovieGridContainer{
+    margin: auto !important;
+    padding: 20px;
+    width: 100% !important;
+}
+
+.MovieGridCard{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.MoviePagination{
+    display: flex;
+    /* align-content: center; */
+    justify-content: center;
+    margin-bottom:20px;
+
+}
+.MovieTotalResults{
+    float: left;
+}
