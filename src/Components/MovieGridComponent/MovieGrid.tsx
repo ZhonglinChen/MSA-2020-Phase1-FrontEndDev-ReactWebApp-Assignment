@@ -35,7 +35,7 @@ function MovieGrid(props: IMovieGridProps) {
 
  
     useEffect(() => {
-        console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}&&page=${CurrentPage}`);
+        // console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}&&page=${CurrentPage}`);
         fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}&&page=${CurrentPage}`)
             .then(response => response.json())
             .then(response => {
@@ -51,7 +51,7 @@ function MovieGrid(props: IMovieGridProps) {
 
 
     useEffect(() => {
-        console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}&&page=${CurrentPage}`);
+        // console.log(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}&&page=${CurrentPage}`);
         fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&&sort_by=${props.SortBy}&primary_release_year=${props.ReleaseYear}&&page=${CurrentPage}`)
             .then(response => response.json())
             .then(response => {
