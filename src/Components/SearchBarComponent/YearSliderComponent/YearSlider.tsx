@@ -47,10 +47,10 @@ interface IYearSliderProps {
 export default function YearSlider(props: IYearSliderProps) {
   const classes = useStyles();
 
-  const DefaultYear:number = 2020;
+  const DefaultYear: number = 2020;
 
   const [YearRelease, setYearRelease] = React.useState(DefaultYear);
-  const handlerYearReleaseChange = (year: number | number[])=> {
+  const handlerYearReleaseChange = (year: number | number[]) => {
     if (typeof year === "number") {
       setYearRelease(year);
       props.SetYearRelease(year);
@@ -60,8 +60,11 @@ export default function YearSlider(props: IYearSliderProps) {
 
   return (
     <div className={classes.root}>
-      <Typography id="discrete-slider-always" gutterBottom>
-        Which Year
+      <Typography  variant="h6"  id="discrete-slider-always" gutterBottom>
+        Which Year <br />
+        <Typography variant="body2" color="textSecondary" component="p">
+          Drag the Slider to Discover Movies in Different Years
+          </Typography>
       </Typography>
       <Slider
         defaultValue={DefaultYear}

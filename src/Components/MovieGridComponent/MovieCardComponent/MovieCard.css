@@ -1,13 +1,18 @@
-.MediaCardContainer{
-    max-width: 310px;
+.MovieCardContainer{
+    /* max-width: 310px; */
+    width:275px;
     margin: auto;
 }
-.MediaCardImage{
+.MovieCardImage{
     height: 200px !important;
     max-width: 310px;
 }
-.MediaCardDescription{
+.MovieCardDescription{
     height: 200px;
     overflow-y: scroll;
     overflow-wrap: break-word;
+}
+.ViewOverview{
+   display:flex;
+   justify-content: flex-end;
 }
