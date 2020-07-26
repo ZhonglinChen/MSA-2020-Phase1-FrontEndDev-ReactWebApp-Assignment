@@ -1,15 +1,30 @@
-Todo:
+# Description
 
-- [ ] frontend part docs
-- [ ] table of contents and abstract of my docs
+This project is implemented for assignments of MSA2020 phase1(https://github.com/NZMSA/2020-Phase-1)
 
-------
+Two parts, **React Web App** and **DevOps**  of assignments was completed.
+
+<br/>
+
+Below lists *the URL of my deployed website of this repo* and *description of build and release pipelines*.
+
+# Table of contents
+
+1. [The URL of my website](https://github.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment#1-the-url-of-my-website)
+
+2. [Description of build and release pipelines](https://github.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment#2-description-of-build-and-release-pipelines)
+
+   2.1 [Build Pipeline](https://github.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment#21-build-pipeline)
+
+   2.2 [Release Pipeline](https://github.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment#22-release-pipeline)
+
+   <br/>
 
 #  1. The URL of my website: 
 
 https://msa2020-phase1-devops-reactwebapp-assignment.azurewebsites.net/
 
-
+<br/>
 
 #  2. Description of build and release pipelines
 
@@ -93,7 +108,7 @@ steps:
     publishLocation: 'Container'
 ```
 
-
+<br/>
 
 ### Build Pipeline - Trigger
 
@@ -114,7 +129,7 @@ trigger:
 
 In the "trigger" section, the pipeline is set to run only when a commit is pushed to the 'master' branch and 'develop' branch except when only change was made to those 'README.md' related files or any '.yml' files started with azure.
 
-
+<br/>
 
 ### Build Pipeline - Variables
 
@@ -128,7 +143,7 @@ variables:
 
 In my project, there is no need o set 'rootDir'. Only 'buildDir' was set as folder called 'build' directly under current root.
 
-
+<br/>
 
 ### Build Pipeline - Steps - Download Secure Files
 
@@ -150,13 +165,13 @@ Therefore, in the first step, before building project, the secure file '.env.loc
 
 For more details about how to access secure files stored in AzureDevOps, read https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/download-secure-file?view=azure-devops 
 
-
+<br/>
 
 To manage yourselves secure files, you could access the tag shown below. 
 
 ![LibrarySecureFiles](https://raw.githubusercontent.com/ZhonglinChen/MSA-2020-Phase1-FrontEndDev-ReactWebApp-Assignment/master/Images/LibrarySecureFiles.png)
 
-
+<br/>
 
 ### Build Pipeline - Steps - Copy '.Env.local' File  
 
@@ -176,7 +191,7 @@ In this step, the '.env.local' that stores API key would be copied to the root f
 
 For this part of scripts, actually only `cp $(myEnvFile.secureFilePath) ./.env.local` is necessary.  Other command lines of 'echo' are all used to print content in the terminal, which is good for debug.
 
-
+<br/>
 
 ### Build Pipeline - Steps - Install NodeJS  
 
@@ -191,7 +206,7 @@ The following is the step of the build pipeline to install NodeJS :
 
 NodeJS is required to build our React application in the following steps.
 
-
+<br/>
 
 ### Build Pipeline - Steps - Install Packages and Build App  
 
@@ -206,7 +221,7 @@ The following is the step of the build pipeline to install NodeJS :
 
 In this step, we run two NPM command lines to respectively install dependent packages for our application and then build our React application.
 
-
+<br/>
 
 ### Build Pipeline - Steps - Archive and Publish
 
@@ -229,7 +244,7 @@ The following is the step of the build pipeline to install NodeJS :
 
 In the last two steps, the build folder would be compressed and published as artifacts.
 
-
+<br/>
 
 ## 2.2 Release Pipeline
 
@@ -247,7 +262,7 @@ The following is the Artifact setting of the release pipeline:
 
 In the release pipeline, the build pipeline at above section is set as source that would publish the artifact.
 
-
+<br/>
 
 ### Release Pipeline - Trigger
 
@@ -257,7 +272,7 @@ The following is the Trigger setting of the release pipeline:
 
 In the trigger setting, we enable that release pipeline would automatically start if there is any new completion coming up from our build pipeline under 'master' branch. 
 
-
+<br/>
 
 ### Release Pipeline - Tasks - Deployment
 
