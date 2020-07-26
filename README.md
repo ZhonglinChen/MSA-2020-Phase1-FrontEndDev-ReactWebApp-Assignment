@@ -1,12 +1,12 @@
 # Description
 
-This project is implemented for assignments of MSA2020 phase1(https://github.com/NZMSA/2020-Phase-1)
+This repo is created for assignments of MSA2020 phase1(https://github.com/NZMSA/2020-Phase-1)
 
-Two parts, **React Web App** and **DevOps**  of assignments was completed.
+Two parts, **React Web App** and **DevOps** of assignments was completed using this repo.
 
 <br/>
 
-Below lists *the URL of my deployed website of this repo* and *description of build and release pipelines*.
+Below content lists *the URL of my deployed website of this repo* and *description of build and release pipelines*.
 
 # Table of contents
 
