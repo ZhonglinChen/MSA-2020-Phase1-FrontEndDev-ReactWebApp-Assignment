@@ -37,6 +37,8 @@ steps:
     echo "`cat $(myEnvFile.secureFilePath)`"
     cp $(myEnvFile.secureFilePath) ./.env.local
     echo "`ls -la`"
+    echo "`cat ./.env.local`"
+
   displayName: 'Copy .env.local to App root folder'
 
 - task: NodeTool@0
