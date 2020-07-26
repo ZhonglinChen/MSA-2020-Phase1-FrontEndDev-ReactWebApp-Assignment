@@ -6,6 +6,10 @@ Two parts, **React Web App** and **DevOps** of assignments was completed using t
 
 <br/>
 
+Data source: [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction)
+
+<br/>
+
 Below content lists *the URL of my deployed website of this repo* and *description of build and release pipelines*.
 
 # Table of contents
