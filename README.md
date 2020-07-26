@@ -1,16 +1,18 @@
 # Description
 
-This repo is created for assignments of MSA2020 phase1(https://github.com/NZMSA/2020-Phase-1)
-
-Two parts, **React Web App** and **DevOps** of assignments was completed using this repo.
+This repo is built to complete assignments of [Front End Development](https://github.com/NZMSA/2020-Phase-1/tree/master/Web%20App) and [DevOps](https://github.com/NZMSA/2020-Phase-1/tree/master/DevOps%20-%20Azure%20Pipeline) in [MSA2020 Phase1](https://github.com/NZMSA/2020-Phase-1).
 
 <br/>
 
-Data source: [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction)
+This React app use data source from [The Movie Database API](https://developers.themoviedb.org/3/getting-started/introduction) and has been deployed to [URL](https://msa2020-phase1-devops-reactwebapp-assignment.azurewebsites.net/) using AZure Web App and Azure DevOps. 
 
 <br/>
 
-Below content lists *the URL of my deployed website of this repo* and *description of build and release pipelines*.
+No docs content is required according to the Front End assignment.
+
+The following content contains the required docs according to the DevOps assignment.
+
+
 
 # Table of contents
 
